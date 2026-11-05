@@ -533,7 +533,27 @@
             
             btn.innerText = "⏳ Menyimpan Data Kehadiran...";
             btn.disabled = true;
+const nama = document.getElementById('nama').value;
+            const status = document.getElementById('status').value;
+            const keterangan = status === 'Wali Santri' ? document.getElementById('nama_santri').value : document.getElementById('tahun_lulus').value;
+            const alamat = document.getElementById('alamat').value;
 
+            const urlScript = "https://script.google.com/macros/s/AKfycbyr1TA0jsY4co7hLUWy2S1VmaCKTanSotY8zzBudDLU88G4tvGa7AdSj9uCpcKfK_DJyA/exec";
+
+            const dataKirim = {
+                nama: nama,
+                status: status,
+                keterangan: keterangan,
+                alamat: alamat
+            };
+
+            fetch(urlScript, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataKirim)
+            }).catch(error => console.error('Error:', error));
+            // -------------------------------------------------------------------------------
             setTimeout(() => {
                 btn.innerText = "✅ Berhasil Check-In (Absen Tercatat)";
                 btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');

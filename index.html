@@ -545,7 +545,9 @@
                     let nama = bagian[0].trim().toUpperCase();
                     let jabatan = bagian[1].trim();
                     
-                    elemenNamaVip.innerHTML = `<span class="block text-amber-100 text-base md:text-xl font-bold tracking-wide">${nama}</span><span class="block no-underline text-amber-300 text-base md:text-xl font-bold tracking-wide mt-0">${jabatan}</span>`;
+                    elemenNamaVip.innerHTML = `
+    <span class="block underline decoration-amber-500 underline-offset-4 text-amber-100 text-base md:text-xl font-bold tracking-wide">${nama}</span>
+    <span class="block no-underline text-amber-300 text-base md:text-xl font-bold tracking-wide mt-0" style="text-decoration:none !important;">${jabatan}</span>`;
                 } else {
                     elemenNamaVip.innerText = teksVip.toUpperCase();
                 }
@@ -560,11 +562,11 @@
             setTimeout(() => {
                 tampilkanSlide(18);
 
-               // Setelah 15 detik, mulai penampilan dari slide 1
+               // Setelah 25 detik, mulai penampilan dari slide 1
                setTimeout(() => {
                    tampilkanSlide(0);
 
-                    // Jalankan otomatis setiap 15 detik
+                    // Jalankan otomatis setiap 10 detik
                     autoSlide = setInterval(() => {
                         if (currentSlide < 16) {
                             geserSlide(1);

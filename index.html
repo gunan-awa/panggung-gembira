@@ -534,9 +534,11 @@
 
         if (namaVip) {
             // ================= KONDISI KHUSUS TAMU VIP =================
+            // 1. Sembunyikan tombol buku tamu di header
             const tombolBukuTamu = document.querySelector('header button');
             if (tombolBukuTamu) tombolBukuTamu.style.display = 'none';
 
+            // 2. Masukkan nama dan jabatan VIP (Nama di baris 1, Jabatan di baris 2)
             const elemenNamaVip = document.getElementById('nama-vip');
             if (elemenNamaVip) {
                 let teksVip = decodeURIComponent(namaVip.replace(/\+/g, ' '));
@@ -551,31 +553,37 @@
                     elemenNamaVip.innerText = teksVip.toUpperCase();
                 }
             }
-            // Sembunyikan slide buku tamu umum (slide ke-18 / index 17)
+
+            // 3. Sembunyikan slide buku tamu umum (Slide ke-18 / index 17)
             if (slides.length >= 18) {
                 slides[17].style.display = 'none'; 
             }
 
-            // Langsung arahkan ke slide VIP paling akhir yang tampil
-            setTimeout(() => {
-                const activeSlides = document.querySelectorAll('.slide-item');
-                let lastIndex = 0;
-                activeSlides.forEach((slide, idx) => {
-                    if (slide.style.display !== 'none') {
-                        lastIndex = idx;
+            // 4. Slider berputar otomatis dari awal, tapi jeda 35 detik saat tiba di slide VIP (index 18)
+            autoSlide = setInterval(() => {
+                if (currentSlide < 18) {
+                    geserSlide(1);
+                    // Jika slide berikutnya adalah slide VIP (index 18), perlambat waktunya jadi 35 detik
+                    if (currentSlide === 18) {
+                        clearInterval(autoSlide);
+                        setTimeout(() => {
+                            tampilkanSlide(0); // Kembali ke slide awal setelah 35 detik
+                        }, 35000);
                     }
-                });
-                tampilkanSlide(lastIndex);
-            }, 50);
+                }
+            }, 5000);
+
+            const sliderContainer = document.getElementById('slider-container');
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlide));
+            }
 
         } else {
             // ================= KONDISI TAMU UMUM / WALI SANTRI =================
-            // Sembunyikan slide VIP terakhir dari tamu umum
             if (slides.length >= 19) {
                 slides[18].style.display = 'none';
             }
 
-            // Slider berputar otomatis sampai slide buku tamu (index 17), lalu berhenti
             autoSlide = setInterval(() => {
                 if (currentSlide < 17) {
                     geserSlide(1);

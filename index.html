@@ -539,9 +539,18 @@
 
             const elemenNamaVip = document.getElementById('nama-vip');
             if (elemenNamaVip) {
-                elemenNamaVip.innerText = decodeURIComponent(namaVip.replace(/\+/g, ' '));
+                let teksVip = decodeURIComponent(namaVip.replace(/\+/g, ' '));
+                
+                if (teksVip.includes('/')) {
+                    let bagian = teksVip.split('/');
+                    let nama = bagian[0].trim().toUpperCase();
+                    let jabatan = bagian[1].trim();
+                    
+                    elemenNamaVip.innerHTML = `<span class="block text-amber-100 text-base md:text-xl font-bold tracking-wide mb-1">${nama}</span><span class="text-amber-300 text-sm md:text-base font-medium">${jabatan}</span>`;
+                } else {
+                    elemenNamaVip.innerText = teksVip.toUpperCase();
+                }
             }
-
             // Sembunyikan slide buku tamu umum (slide ke-18 / index 17)
             if (slides.length >= 18) {
                 slides[17].style.display = 'none'; 

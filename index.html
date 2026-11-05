@@ -484,7 +484,6 @@
     </footer>
 
     <!-- SCRIPT JAVASCRIPT -->
-    <!-- SCRIPT JAVASCRIPT -->
     <script>
         function bukaFormAbsen() {
             document.getElementById('modal-absen').classList.remove('hidden');
@@ -534,11 +533,9 @@
 
         if (namaVip) {
             // ================= KONDISI KHUSUS TAMU VIP =================
-            // 1. Sembunyikan tombol buku tamu di header
             const tombolBukuTamu = document.querySelector('header button');
             if (tombolBukuTamu) tombolBukuTamu.style.display = 'none';
 
-            // 2. Masukkan nama dan jabatan VIP (Nama di baris 1, Jabatan di baris 2)
             const elemenNamaVip = document.getElementById('nama-vip');
             if (elemenNamaVip) {
                 let teksVip = decodeURIComponent(namaVip.replace(/\+/g, ' '));
@@ -553,31 +550,40 @@
                     elemenNamaVip.innerText = teksVip.toUpperCase();
                 }
             }
-
-            // 3. Sembunyikan slide buku tamu umum (Slide ke-18 / index 17)
+            // Sembunyikan slide buku tamu umum (slide ke-18 / index 17)
             if (slides.length >= 18) {
                 slides[17].style.display = 'none'; 
             }
 
-            // 4. Slider berputar otomatis dari awal, tapi jeda 35 detik saat tiba di slide VIP (index 18)
-            autoSlide = setInterval(() => {
-                if (currentSlide < 18) {
-                    geserSlide(1);
-                    // Jika slide berikutnya adalah slide VIP (index 18), perlambat waktunya jadi 35 detik
-                    if (currentSlide === 18) {
-                        clearInterval(autoSlide);
-                        setTimeout(() => {
-                            tampilkanSlide(0); // Kembali ke slide awal setelah 35 detik
-                        }, 35000);
+            // 1. Langsung arahkan ke slide VIP paling akhir di awal buka halaman
+            setTimeout(() => {
+                const activeSlides = document.querySelectorAll('.slide-item');
+                let lastIndex = 0;
+                activeSlides.forEach((slide, idx) => {
+                    if (slide.style.display !== 'none') {
+                        lastIndex = idx;
                     }
-                }
-            }, 5000);
+                });
+                tampilkanSlide(lastIndex);
 
-            const sliderContainer = document.getElementById('slider-container');
-            if (sliderContainer) {
-                sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlide));
-            }
+                // 2. Setelah tamu VIP membaca selama 10 detik di awal, mulai putar slide penampilan dari awal
+                setTimeout(() => {
+                    tampilkanSlide(0); // Pindah ke slide pertama penampilan
+                    
+                    // Slider berputar otomatis dari penampilan 1 sampai habis
+                    autoSlide = setInterval(() => {
+                        if (currentSlide < lastIndex - 1) {
+                            geserSlide(1);
+                        } else {
+                            clearInterval(autoSlide);
+                        }
+                    }, 5000);
 
+                }, 10000); // Jeda 10 detik di halaman undangan VIP sebelum mulai mutar
+
+            }, 50);
+
+        }
         } else {
             // ================= KONDISI TAMU UMUM / WALI SANTRI =================
             if (slides.length >= 19) {

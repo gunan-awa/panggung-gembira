@@ -555,16 +555,27 @@
                 slides[17].style.display = 'none'; 
             }
 
-            // Langsung arahkan ke slide VIP paling akhir yang tampil
+            
+            // Tampilkan slide VIP terlebih dahulu
             setTimeout(() => {
-                const activeSlides = document.querySelectorAll('.slide-item');
-                let lastIndex = 0;
-                activeSlides.forEach((slide, idx) => {
-                    if (slide.style.display !== 'none') {
-                        lastIndex = idx;
-                    }
-                });
-                tampilkanSlide(lastIndex);
+                tampilkanSlide(18);
+
+               // Setelah 15 detik, mulai penampilan dari slide 1
+               setTimeout(() => {
+                   tampilkanSlide(0);
+
+                    // Jalankan otomatis setiap 15 detik
+                    autoSlide = setInterval(() => {
+                        if (currentSlide < 16) {
+                            geserSlide(1);
+                        } else {
+                            // Berhenti setelah slide 17
+                            clearInterval(autoSlide);
+                        }
+                    }, 5000);
+
+                }, 5000);
+
             }, 50);
 
         } else {

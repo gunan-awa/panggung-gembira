@@ -398,7 +398,7 @@
                 <span class="bg-amber-600 text-white font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-widest inline-block">✨ Undangan Khusus VIP ✨</span>
                 
                 <h3 class="font-serif-custom text-xl md:text-2xl text-amber-200">
-                    Kepada Yth. <br><span id="nama-vip" class="text-amber-300 font-bold underline decoration-amber-500 underline-offset-4">Bapak/Ibu/Saudara(i)</span>
+               Kepada Yth. <br><span id="nama-vip" class="text-amber-300 font-bold">Bapak/Ibu/Saudara(i)</span>
                 </h3>
 
                 <p class="text-xs md:text-sm text-emerald-100 leading-relaxed text-justify px-2">
@@ -546,8 +546,8 @@
                     let jabatan = bagian[1].trim();
                     
                     elemenNamaVip.innerHTML = `
-    <span class="block underline decoration-amber-500 underline-offset-4 text-amber-100 text-base md:text-xl font-bold tracking-wide">${nama}</span>
-    <span class="block no-underline text-amber-300 text-base md:text-xl font-bold tracking-wide mt-0" style="text-decoration:none !important;">${jabatan}</span>
+    <span class="block text-amber-100 text-base md:text-xl font-bold tracking-wide underline decoration-amber-500 underline-offset-4">${nama}</span>
+    <span class="block text-amber-300 text-base md:text-xl font-bold tracking-wide mt-0" style="text-decoration:none !important;">${jabatan}</span>
     `;
                 } else {
                     elemenNamaVip.innerText = teksVip.toUpperCase();

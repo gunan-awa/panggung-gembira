@@ -484,6 +484,7 @@
     </footer>
 
     <!-- SCRIPT JAVASCRIPT -->
+    <!-- SCRIPT JAVASCRIPT -->
     <script>
         function bukaFormAbsen() {
             document.getElementById('modal-absen').classList.remove('hidden');
@@ -512,11 +513,13 @@
 
         function tampilkanSlide(index) {
             slides.forEach(slide => slide.classList.remove('active-slide'));
-            if (index >= totalSlides) { currentSlide = 0; }
-            else if (index < 0) { currentSlide = totalSlides - 1; }
+            
+            if (index >= slides.length) { currentSlide = 0; }
+            else if (index < 0) { currentSlide = slides.length - 1; }
             else { currentSlide = index; }
+
             slides[currentSlide].classList.add('active-slide');
-            document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + totalSlides;
+            document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + slides.length;
         }
 
         function geserSlide(n) {
@@ -544,20 +547,28 @@
                 slides[17].style.display = 'none'; 
             }
 
-            // Langsung arahkan ke slide VIP paling akhir (slide ke-19 / index 18)
+            // Langsung arahkan ke slide VIP paling akhir yang tampil
             setTimeout(() => {
-                tampilkanSlide(18);
+                const activeSlides = document.querySelectorAll('.slide-item');
+                let lastIndex = 0;
+                activeSlides.forEach((slide, idx) => {
+                    if (slide.style.display !== 'none') {
+                        lastIndex = idx;
+                    }
+                });
+                tampilkanSlide(lastIndex);
             }, 50);
 
         } else {
             // ================= KONDISI TAMU UMUM / WALI SANTRI =================
-            // Sembunyikan slide VIP terakhir (slide ke-19 / index 18) dari tamu umum
+            // Sembunyikan slide VIP terakhir dari tamu umum
             if (slides.length >= 19) {
                 slides[18].style.display = 'none';
             }
 
-            // Jalankan slider otomatis untuk tamu umum (berhenti di slide 18)
+            // Slider berputar otomatis sampai slide buku tamu (index 17), lalu berhenti
             autoSlide = setInterval(() => {
+                if (currentSlide < 17) {
                     geserSlide(1);
                 } else {
                     clearInterval(autoSlide);

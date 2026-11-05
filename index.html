@@ -555,7 +555,7 @@
                 slides[17].style.display = 'none'; 
             }
 
-            // 1. Langsung arahkan ke slide VIP paling akhir di awal buka halaman
+            // Langsung arahkan ke slide VIP paling akhir yang tampil
             setTimeout(() => {
                 const activeSlides = document.querySelectorAll('.slide-item');
                 let lastIndex = 0;
@@ -565,31 +565,16 @@
                     }
                 });
                 tampilkanSlide(lastIndex);
-
-                // 2. Setelah tamu VIP membaca selama 10 detik di awal, mulai putar slide penampilan dari awal
-                setTimeout(() => {
-                    tampilkanSlide(0); // Pindah ke slide pertama penampilan
-                    
-                    // Slider berputar otomatis dari penampilan 1 sampai habis
-                    autoSlide = setInterval(() => {
-                        if (currentSlide < lastIndex - 1) {
-                            geserSlide(1);
-                        } else {
-                            clearInterval(autoSlide);
-                        }
-                    }, 5000);
-
-                }, 10000); // Jeda 10 detik di halaman undangan VIP sebelum mulai mutar
-
             }, 50);
 
-        }
         } else {
             // ================= KONDISI TAMU UMUM / WALI SANTRI =================
+            // Sembunyikan slide VIP terakhir dari tamu umum
             if (slides.length >= 19) {
                 slides[18].style.display = 'none';
             }
 
+            // Slider berputar otomatis sampai slide buku tamu (index 17), lalu berhenti
             autoSlide = setInterval(() => {
                 if (currentSlide < 17) {
                     geserSlide(1);
@@ -602,7 +587,7 @@
             if (sliderContainer) {
                 sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlide));
             }
-        }
+         }
 
         // Simpan Absensi Tamu ke Google Sheets
         function kirimAbsen(e) {

@@ -391,9 +391,46 @@
                     </button>
                 </div>
             </div>
+        </div><!-- CONTAINER SLIDER -->
+        <div id="slider-container" class="relative">
 
+            <!-- ... (Slide 1 sampai 17 penampilan santri di sini) ... -->
+
+            <!-- ================= SLIDE 18: BUKU TAMU UMUM ================= -->
+            <div class="slide-item bg-[#113822]/95 border border-amber-500/80 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5 text-center">
+                <!-- (Isi slide buku tamu umum yang sudah ada) -->
+            </div>
+
+            <!-- ================= LETAK KODE INI: SLIDE 19 (VIP) ================= -->
+            <div class="slide-item bg-[#113822]/95 border border-amber-500/80 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5 text-center">
+                <span class="bg-amber-600 text-white font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-widest inline-block">✨ Undangan Khusus VIP ✨</span>
+                
+                <h3 class="font-serif-custom text-xl md:text-2xl text-amber-200">
+                    Kepada Yth. <br><span id="nama-vip" class="text-amber-300 font-bold underline decoration-amber-500 underline-offset-4">Bapak/Ibu/Saudara(i)</span>
+                </h3>
+
+                <p class="text-xs md:text-sm text-emerald-100 leading-relaxed text-justify px-2">
+                    Dengan memohon rahmat dan ridho Allah SWT, suatu kehormatan dan kebahagiaan besar bagi kami apabila Bapak/Ibu/Saudara(i) berkenan hadir untuk memberikan doa restu serta menyaksikan malam puncak pementasan seni santri dalam acara <strong>Panggung Gembira 2026</strong> Pondok Pesantren Modern An-Nawa. Kehormatan besar bagi kami atas kehadiran Bapak/Ibu sekalian.
+                </p>
+                <div class="pt-2 text-amber-300 font-semibold text-xs bg-[#091b10] border border-emerald-800/60 rounded-lg p-3">
+                    📌 Undangan Khusus VIP (Tanpa perlu konfirmasi kehadiran online).
+                </div>
+            </div>
+
+        </div> <!-- Tutup div slider-container -->
+
+        <!-- TOMBOL NAVIGASI MANUAL -->
+        <div class="flex justify-between items-center pt-2">
+            <button onclick="geserSlide(-1)" class="bg-emerald-900 hover:bg-emerald-800 border border-emerald-600 text-amber-300 px-5 py-2.5 rounded-xl font-semibold text-xs transition cursor-pointer shadow-md">
+                ⬅️ Sebelumnya
+            </button>
+            <span id="slide-indicator" class="text-xs text-emerald-200 font-medium">1 dari 19</span>
+            <button onclick="geserSlide(1)" class="bg-amber-500 hover:bg-amber-400 text-stone-950 px-5 py-2.5 rounded-xl font-semibold text-xs transition cursor-pointer shadow-md">
+                Selanjutnya ➡️
+            </button>
         </div>
 
+    </main> <!-- Tutup tag <main> -->
         <!-- TOMBOL NAVIGASI MANUAL -->
         <div class="flex justify-between items-center pt-2">
             <button onclick="geserSlide(-1)" class="bg-emerald-900 hover:bg-emerald-800 border border-emerald-600 text-amber-300 px-5 py-2.5 rounded-xl font-semibold text-xs transition cursor-pointer shadow-md">
@@ -524,6 +561,71 @@
 
         const sliderContainer = document.getElementById('slider-container');
         sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlide));
+        <script>
+        // ... (Fungsi bukaFormAbsen, tutupFormAbsen, dll. di atasnya) ...
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-item');
+        const totalSlides = slides.length;
+
+        function tampilkanSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active-slide'));
+            if (index >= totalSlides) { currentSlide = 0; }
+            else if (index < 0) { currentSlide = totalSlides - 1; }
+            else { currentSlide = index; }
+            slides[currentSlide].classList.add('active-slide');
+            document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + totalSlides;
+        }
+
+        function geserSlide(n) {
+            tampilkanSlide(currentSlide + n);
+        }
+
+        <!-- ================= LETAK KODE LOGIKA INI DI SINI ================= -->
+        const urlParams = new URLSearchParams(window.location.search);
+        const namaVip = urlParams.get('untuk');
+
+        let autoSlide;
+
+        if (namaVip) {
+            // ================= KONDISI KHUSUS TAMU VIP =================
+            const tombolBukuTamu = document.querySelector('header button');
+            if (tombolBukuTamu) tombolBukuTamu.style.display = 'none';
+
+            const elemenNamaVip = document.getElementById('nama-vip');
+            if (elemenNamaVip) {
+                elemenNamaVip.innerText = decodeURIComponent(namaVip.replace(/\+/g, ' '));
+            }
+
+            if (slides.length >= 18) {
+                slides[17].remove(); 
+            }
+
+            setTimeout(() => {
+                const updatedSlides = document.querySelectorAll('.slide-item');
+                tampilkanSlide(updatedSlides.length - 1);
+            }, 50);
+
+        } else {
+            // ================= KONDISI TAMU UMUM / WALI SANTRI =================
+            if (slides.length >= 19) {
+                slides[18].remove();
+            }
+
+            autoSlide = setInterval(() => {
+                if (currentSlide < document.querySelectorAll('.slide-item').length - 1) {
+                    geserSlide(1);
+                } else {
+                    clearInterval(autoSlide);
+                }
+            }, 5000);
+
+            const sliderContainer = document.getElementById('slider-container');
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlide));
+            }
+        }
+
         // Simpan Absensi Tamu
         function kirimAbsen(e) {
             e.preventDefault();

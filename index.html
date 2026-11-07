@@ -85,8 +85,7 @@
     </div>
 </header>
     <!-- KONTEN UTAMA: SLIDER PENAMPILAN & SLIDE AKHIR UNDANGAN -->
-    <main class="max-w-2xl w-full mx-auto px-4 py-10 space-y-6">
-     playAudioOnSlideChange();   
+    <main class="max-w-2xl w-full mx-auto px-4 py-10 space-y-6">  
         <div class="text-center space-y-2 mb-4">
             <h2 class="font-serif-custom text-2xl text-amber-200">Daftar Acara & Penampilan</h2>
             <div class="w-20 h-0.5 bg-amber-500 mx-auto"></div>
@@ -560,6 +559,7 @@
 
             slides[currentSlide].classList.add('active-slide');
             document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + slides.length;
+            playAudioOnSlideChange();
         }
 
         function geserSlide(n) {

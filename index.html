@@ -47,13 +47,17 @@
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-stone-950 min-h-screen flex flex-col justify-between">
 
-    <!-- PEMUTAR MUSIK YOUTUBE LATAR (DIHALAMAN PERTAMA) -->
-    <div style="display: none;">
-        <iframe id="youtube-player" width="100" height="100" 
-            src="https://www.youtube.com/embed/jMZgHmewaeU?enablejsapi=1&autoplay=1&loop=1&playlist=jMZgHmewaeU" 
-            allow="autoplay">
-        </iframe>
-    </div>
+    <!-- PEMUTAR MUSIK YOUTUBE LATAR -->
+<div style="position: fixed; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none;">
+    <iframe
+        id="youtube-player"
+        width="1"
+        height="1"
+        src="https://www.youtube.com/embed/jMZgHmewaeU?autoplay=1&playsinline=1&loop=1&playlist=jMZgHmewaeU"
+        allow="autoplay; encrypted-media"
+        frameborder="0">
+    </iframe>
+</div>
     <!-- HEADER / BANNER UTAMA -->
 <header class="hero-bg border-b border-emerald-300 pt-2 pb-1 px-1 text-center shadow-0x0 relative">
     <div class="max-w-0x0 mx-auto flex flex-col items-center">
@@ -683,13 +687,6 @@
                 notif.classList.remove('hidden');
             }, 1000);
         }
-        // MEMANCING AUDIO AGAR BERPUTAR OTOMATIS SAAT ADA SENTUHAN PERTAMA DI LAYAR
-    document.addEventListener('click', function() {
-        const iframe = document.getElementById('youtube-player');
-        if (iframe && iframe.src.indexOf('autoplay=1') === -1) {
-            iframe.src = "https://www.youtube.com/embed/jMZgHmewaeU?enablejsapi=1&autoplay=1&loop=1&playlist=jMZgHmewaeU";
-        }
-    }, { once: true });
     </script>
 </body>
 </html>

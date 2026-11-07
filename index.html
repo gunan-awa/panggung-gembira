@@ -683,6 +683,13 @@
                 notif.classList.remove('hidden');
             }, 1000);
         }
+        // MEMANCING AUDIO AGAR BERPUTAR OTOMATIS SAAT ADA SENTUHAN PERTAMA DI LAYAR
+    document.addEventListener('click', function() {
+        const iframe = document.getElementById('youtube-player');
+        if (iframe && iframe.src.indexOf('autoplay=1') === -1) {
+            iframe.src = "https://www.youtube.com/embed/jMZgHmewaeU?enablejsapi=1&autoplay=1&loop=1&playlist=jMZgHmewaeU";
+        }
+    }, { once: true });
     </script>
 </body>
 </html>

@@ -559,7 +559,6 @@
 
             slides[currentSlide].classList.add('active-slide');
             document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + slides.length;
-            playAudioOnSlideChange();
         }
 
         function geserSlide(n) {
@@ -681,27 +680,26 @@
                 notif.classList.remove('hidden');
             }, 1000);
         }
-        // FUNGSI UNTUK MEMUTAR AUDIO SAAT SLIDE OTOMATIS BERGESER
-        function playAudioOnSlideChange() {
-            const audio = document.getElementById('background-audio');
-            if (audio && audio.paused) {
-                audio.play().catch(error => {
-                    console.log("Menunggu interaksi/pergeseran berikutnya:", error);
-                });
-            }
-        }
+        // AUDIO DIMULAI BERSAMA PERGESERAN SLIDE OTOMATIS
+const audioPG = document.getElementById('background-audio');
 
-        // Sisipkan fungsi di atas ke dalam fungsi pergeseran slide otomatis antum, 
-        // atau jalankan otomatis saat slide pertama mulai tampil:
-        window.addEventListener('DOMContentLoaded', function() {
-            const audio = document.getElementById('background-audio');
-            if (audio) {
-                audio.play().catch(() => {
-                    // Jika diblokir ketat oleh browser, audio akan langsung mengalun 
-                    // begitu slide otomatis bergeser untuk pertama kalinya.
-                });
-            }
+function mulaiAudioPG() {
+    if (!audioPG) return;
+
+    if (audioPG.paused) {
+        audioPG.play().catch(error => {
+            console.log("Browser memblokir autoplay audio:", error);
         });
+    }
+}
+
+// Coba jalankan audio saat halaman selesai dimuat
+window.addEventListener('load', function() {
+    mulaiAudioPG();
+});
+
+// Pastikan audio tetap dicoba saat slide pertama kali bergeser
+mulaiAudioPG();
     </script>
 </body>
 </html>

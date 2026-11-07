@@ -560,6 +560,7 @@
 
             slides[currentSlide].classList.add('active-slide');
             document.getElementById('slide-indicator').innerText = (currentSlide + 1) + " dari " + slides.length;
+            playAudioOnSlideChange();
         }
 
         function geserSlide(n) {

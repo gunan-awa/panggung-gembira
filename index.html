@@ -709,12 +709,12 @@ window.addEventListener('load', function() {
 mulaiAudioPG();
         
 </script>
-<!-- ================= KOTAK UCAPAN & DOA RESTU PUBLIK (TERSIMPAN PERMANEN) ================= -->
+<!-- ================= KOTAK UCAPAN & DOA RESTU PUBLIK (TERHUBUNG SPREADSHEET) ================= -->
 <section class="max-w-2xl w-full mx-auto px-4 py-8 space-y-4">
     <div class="bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-5 text-stone-900">
         <div class="text-center space-y-1">
             <h3 class="font-serif-custom text-xl text-stone-900 font-bold">Ucapan & Doa Restu</h3>
-            <p class="text-xs text-stone-600">Tuliskan ucapan atau doa untuk kesuksesan Panggung Gembira 2026.</p>
+            <p class="text-xs text-stone-600">Tuliskan ucapan atau doa untuk kesuksesan Panggung Gembira 2026. Semua ucapan akan tersimpan otomatis.</p>
         </div>
 
         <!-- Form Kirim Ucapan Tanpa Login -->
@@ -729,27 +729,65 @@ mulaiAudioPG();
                 <textarea id="ucapan-pesan" required rows="3" placeholder="Tuliskan ucapan dan doa Anda di sini..." class="w-full bg-white border border-stone-400 rounded-xl px-4 py-2 text-xs text-stone-900 focus:outline-none focus:border-stone-900"></textarea>
             </div>
 
-            <button type="submit" id="btn-kirim-ucapan" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs py-2.5 rounded-xl shadow-md transition cursor-pointer">
+            <button type="submit" id="btn-kirim-ucapan" class="w-full bg-stone-100 hover:bg-stone-200 text-stone-900 font-bold border border-stone-400 text-xs py-2.5 rounded-xl shadow-sm transition cursor-pointer">
                 💌 Kirim Ucapan
             </button>
         </form>
 
-        <!-- Daftar Ucapan yang Masuk (Menampilkan Semua Riwayat) -->
+        <!-- Daftar Ucapan yang Masuk (Tersimpan & Tidak Hilang saat Refresh) -->
         <div class="space-y-3 pt-2">
             <h4 class="text-xs font-bold text-stone-900 border-b border-stone-200 pb-1">Semua Ucapan Masuk:</h4>
             <div id="daftar-ucapan" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
-                <!-- Ucapan statis / sambutan awal -->
                 <div class="bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1">
                     <p class="font-bold text-stone-900">Panitia Panggung Gembira 2026</p>
-                    <p class="text-stone-700 font-normal">Selamat datang di Buku Tamu & Ucapan Digital. Silakan berikan doa dan dukungan Anda di atas!</p>
+                    <p class="text-stone-700 font-normal">Memuat ucapan...</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SCRIPT UNTUK MENYIMPAN & MENAMPILKAN UCAPAN -->
+<!-- SCRIPT UNTUK MENYIMPAN & MENAMPILKAN UCAPAN DARI SPREADSHEET -->
 <script>
+    // Link Web App Google Apps Script dari spreadsheet Anda
+    const urlScriptUcapan = "https://script.google.com/macros/s/AKfycbyr1TA0jsY4co7hLUWy2S1VmaCKTanSotY8zzBudDLU88G4tvGa7AdSj9uCpcKfK_DJyA/exec"; 
+
+    // Fungsi untuk memuat semua ucapan dari Spreadsheet saat halaman dibuka
+    function muatUcapan() {
+        fetch(urlScriptUcapan)
+            .then(response => response.json())
+            .then(data => {
+                const daftarContainer = document.getElementById('daftar-ucapan');
+                if (!daftarContainer) return;
+                
+                daftarContainer.innerHTML = '';
+                
+                if (!data || data.length === 0) {
+                    daftarContainer.innerHTML = `
+                        <div class="bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1">
+                            <p class="font-bold text-stone-900">Panitia Panggung Gembira 2026</p>
+                            <p class="text-stone-700 font-normal">Belum ada ucapan. Jadilah yang pertama memberikan doa restu!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                data.forEach(item => {
+                    const elemen = document.createElement('div');
+                    elemen.className = "bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1";
+                    elemen.innerHTML = `
+                        <p class="font-bold text-stone-900">${escapeHtml(item.nama)}</p>
+                        <p class="text-stone-700 font-normal">${escapeHtml(item.pesan)}</p>
+                    `;
+                    daftarContainer.appendChild(elemen);
+                });
+            })
+            .catch(error => {
+                console.error('Gagal memuat ucapan:', error);
+            });
+    }
+
+    // Fungsi saat tombol Kirim Ucapan ditekan
     function kirimUcapanPublik(e) {
         e.preventDefault();
         const btn = document.getElementById('btn-kirim-ucapan');
@@ -759,47 +797,49 @@ mulaiAudioPG();
         btn.innerText = "⏳ Mengirim Ucapan...";
         btn.disabled = true;
 
-        const nama = namaInput.value;
-        const pesan = pesanInput.value;
-
-        // 1. Tampilkan langsung di layar bagian atas daftar ucapan secara instan
-        const daftarContainer = document.getElementById('daftar-ucapan');
-        const elemenBaru = document.createElement('div');
-        elemenBaru.className = "bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1 animate-fadeIn";
-        elemenBaru.innerHTML = `
-            <p class="font-bold text-stone-900">${nama}</p>
-            <p class="text-stone-700 font-normal">${pesan}</p>
-        `;
-        daftarContainer.prepend(elemenBaru);
-
-        // 2. Kirim data ke Google Sheets agar tersimpan permanen
-        const urlScript = "URL_GOOGLE_SCRIPT_ANDA"; // Ganti dengan link Web App Google Apps Script Anda
         const dataKirim = {
-            nama: nama,
-            pesan: pesan
+            nama: namaInput.value,
+            pesan: pesanInput.value
         };
 
-        fetch(urlScript, {
+        // Kirim data ke Spreadsheet
+        fetch(urlScriptUcapan, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataKirim)
-        }).catch(error => console.error('Error:', error));
+        }).then(() => {
+            namaInput.value = '';
+            pesanInput.value = '';
+            btn.innerText = "✅ Ucapan Berhasil Terkirim!";
+            btn.classList.remove('bg-stone-100', 'hover:bg-stone-200', 'text-stone-900');
+            btn.classList.add('bg-emerald-700', 'text-white');
 
-        // 3. Reset form & berikan notifikasi sukses yang bersih
-        namaInput.value = '';
-        pesanInput.value = '';
-        btn.innerText = "✅ Ucapan Berhasil Terkirim!";
-        btn.classList.remove('bg-stone-900', 'hover:bg-stone-800');
-        btn.classList.add('bg-emerald-700', 'text-white');
-
-        setTimeout(() => {
-            btn.innerText = "💌 Kirim Ucapan";
-            btn.classList.remove('bg-emerald-700', 'text-white');
-            btn.classList.add('bg-stone-100', 'hover:bg-stone-200', 'text-stone-900');
+            setTimeout(() => {
+                btn.innerText = "💌 Kirim Ucapan";
+                btn.classList.remove('bg-emerald-700', 'text-white');
+                btn.classList.add('bg-stone-100', 'hover:bg-stone-200', 'text-stone-900');
+                btn.disabled = false;
+                muatUcapan(); // Muat ulang daftar ucapan terbaru dari Spreadsheet
+            }, 2000);
+        }).catch(error => {
+            console.error('Error:', error);
             btn.disabled = false;
-        }, 3000);
+            btn.innerText = "💌 Kirim Ucapan";
+        });
     }
+
+    // Fungsi pengaman teks HTML
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Otomatis muat ucapan saat halaman selesai dimuat
+    window.addEventListener('load', () => {
+        muatUcapan();
+    });
+</script>
 </script>
 </script>
 </body>

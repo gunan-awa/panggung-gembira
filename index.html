@@ -761,7 +761,12 @@ mulaiAudioPG();
                 if (!daftarContainer) return;
                 
                 daftarContainer.innerHTML = '';
-                
+                          function balasKomentar(namaOrang) {
+                const pesanInput = document.getElementById('ucapan-pesan');
+                pesanInput.value = `@${namaOrang} `;
+                pesanInput.focus();
+            }
+  
                 if (!data || data.length === 0) {
                     daftarContainer.innerHTML = `
                         <div class="bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1">
@@ -782,11 +787,6 @@ mulaiAudioPG();
                     daftarContainer.appendChild(elemen);
                 });
             })
-            function balasKomentar(namaOrang) {
-                const pesanInput = document.getElementById('ucapan-pesan');
-                pesanInput.value = `@${namaOrang} `;
-                pesanInput.focus();
-            }
             .catch(error => {
                 console.error('Gagal memuat ucapan:', error);
             });

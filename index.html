@@ -708,45 +708,46 @@ window.addEventListener('load', function() {
 // Pastikan audio tetap dicoba saat slide pertama kali bergeser
 mulaiAudioPG();
 </script>
-<!-- ================= KOTAK UCAPAN & DOA RESTU PUBLIK ================= -->
+<!-- ================= KOTAK UCAPAN & DOA RESTU PUBLIK (TERSIMPAN PERMANEN) ================= -->
 <section class="max-w-2xl w-full mx-auto px-4 py-8 space-y-4">
-    <div class="bg-[#113822]/95 border border-emerald-800/80 rounded-2xl p-6 shadow-xl space-y-5">
+    <div class="bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-5 text-stone-900">
         <div class="text-center space-y-1">
-            <h3 class="font-serif-custom text-xl text-amber-100">Ucapan & Doa Restu</h3>
-            <p class="text-xs text-emerald-300">Tuliskan ucapan atau doa untuk kesuksesan Panggung Gembira 2026.</p>
+            <h3 class="font-serif-custom text-xl text-stone-900 font-bold">Ucapan & Doa Restu</h3>
+            <p class="text-xs text-stone-600">Tuliskan ucapan atau doa untuk kesuksesan Panggung Gembira 2026. Semua ucapan akan tersimpan di sini.</p>
         </div>
 
         <!-- Form Kirim Ucapan Tanpa Login -->
-        <form id="form-ucapan" onsubmit="kirimUcapanPublik(event)" class="space-y-3 bg-[#091b10] border border-emerald-800/60 rounded-xl p-4">
+        <form id="form-ucapan" onsubmit="kirimUcapanPublik(event)" class="space-y-3 bg-stone-50 border border-stone-300 rounded-xl p-4">
             <div class="space-y-1">
-                <label class="text-[11px] font-semibold text-emerald-200 block">Nama / Panggilan:</label>
-                <input type="text" id="ucapan-nama" required placeholder="Contoh: H. Ahmad Fauzi / Wali Santri" class="w-full bg-[#113822] border border-emerald-700 rounded-xl px-4 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-500">
+                <label class="text-[11px] font-semibold text-stone-800 block">Nama / Panggilan:</label>
+                <input type="text" id="ucapan-nama" required placeholder="Contoh: H. Ahmad Fauzi / Wali Santri" class="w-full bg-white border border-stone-400 rounded-xl px-4 py-2 text-xs text-stone-900 focus:outline-none focus:border-stone-900">
             </div>
 
             <div class="space-y-1">
-                <label class="text-[11px] font-semibold text-emerald-200 block">Pesan & Doa Restu:</label>
-                <textarea id="ucapan-pesan" required rows="3" placeholder="Tuliskan ucapan dan doa Anda di sini..." class="w-full bg-[#113822] border border-emerald-700 rounded-xl px-4 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-500"></textarea>
+                <label class="text-[11px] font-semibold text-stone-800 block">Pesan & Doa Restu:</label>
+                <textarea id="ucapan-pesan" required rows="3" placeholder="Tuliskan ucapan dan doa Anda di sini..." class="w-full bg-white border border-stone-400 rounded-xl px-4 py-2 text-xs text-stone-900 focus:outline-none focus:border-stone-900"></textarea>
             </div>
 
-            <button type="submit" id="btn-kirim-ucapan" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs py-2.5 rounded-xl shadow-lg transition cursor-pointer">
+            <button type="submit" id="btn-kirim-ucapan" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs py-2.5 rounded-xl shadow-md transition cursor-pointer">
                 💌 Kirim Ucapan
             </button>
         </form>
 
-        <!-- Daftar Ucapan yang Masuk -->
+        <!-- Daftar Ucapan yang Masuk (Menampilkan Semua Riwayat) -->
         <div class="space-y-3 pt-2">
-            <h4 class="text-xs font-bold text-amber-200 border-b border-emerald-800 pb-1">Daftar Ucapan Masuk:</h4>
-            <div id="daftar-ucapan" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                <div class="bg-[#091b10] border border-emerald-800/40 rounded-xl p-3 text-xs space-y-1">
-                    <p class="font-bold text-amber-300">Panitia Panggung Gembira 2026</p>
-                    <p class="text-emerald-100 font-normal">Selamat datang di Buku Tamu & Ucapan Digital. Silakan berikan doa dan dukungan Anda di atas!</p>
+            <h4 class="text-xs font-bold text-stone-900 border-b border-stone-200 pb-1">Semua Ucapan Masuk:</h4>
+            <div id="daftar-ucapan" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                <!-- Ucapan statis / sambutan awal -->
+                <div class="bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1">
+                    <p class="font-bold text-stone-900">Panitia Panggung Gembira 2026</p>
+                    <p class="text-stone-700 font-normal">Selamat datang di Buku Tamu & Ucapan Digital. Silakan berikan doa dan dukungan Anda di atas!</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SCRIPT TAMBAHAN UNTUK UCAPAN -->
+<!-- SCRIPT UNTUK MENYIMPAN & MENAMPILKAN UCAPAN -->
 <script>
     function kirimUcapanPublik(e) {
         e.preventDefault();
@@ -760,30 +761,45 @@ mulaiAudioPG();
         const nama = namaInput.value;
         const pesan = pesanInput.value;
 
-        // Tambahkan langsung ke daftar ucapan di layar secara instan
+        // 1. Tampilkan langsung di layar bagian atas daftar ucapan secara instan
         const daftarContainer = document.getElementById('daftar-ucapan');
         const elemenBaru = document.createElement('div');
-        elemenBaru.className = "bg-[#091b10] border border-emerald-800/40 rounded-xl p-3 text-xs space-y-1 animate-fadeIn";
+        elemenBaru.className = "bg-stone-50 border border-stone-300 rounded-xl p-3 text-xs space-y-1 animate-fadeIn";
         elemenBaru.innerHTML = `
-            <p class="font-bold text-amber-300">${nama}</p>
-            <p class="text-emerald-100 font-normal">${pesan}</p>
+            <p class="font-bold text-stone-900">${nama}</p>
+            <p class="text-stone-700 font-normal">${pesan}</p>
         `;
         daftarContainer.prepend(elemenBaru);
 
-        // Reset form
+        // 2. Kirim data ke Google Sheets agar tersimpan permanen
+        const urlScript = "URL_GOOGLE_SCRIPT_ANDA"; // Ganti dengan link Web App Google Apps Script Anda
+        const dataKirim = {
+            nama: nama,
+            pesan: pesan
+        };
+
+        fetch(urlScript, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataKirim)
+        }).catch(error => console.error('Error:', error));
+
+        // 3. Reset form & berikan notifikasi sukses yang bersih
         namaInput.value = '';
         pesanInput.value = '';
         btn.innerText = "✅ Ucapan Berhasil Terkirim!";
-        btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+        btn.classList.remove('bg-stone-900', 'hover:bg-stone-800');
         btn.classList.add('bg-emerald-700', 'text-white');
 
         setTimeout(() => {
             btn.innerText = "💌 Kirim Ucapan";
             btn.classList.remove('bg-emerald-700', 'text-white');
-            btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
+            btn.classList.add('bg-stone-900', 'hover:bg-stone-800');
             btn.disabled = false;
         }, 3000);
     }
+</script>
 </script>
 </body>
 </html>

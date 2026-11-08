@@ -773,10 +773,16 @@ mulaiAudioPG();
         // Reset form
         namaInput.value = '';
         pesanInput.value = '';
-        btn.innerText = "💌 Kirim Ucapan";
-        btn.disabled = false;
-        
-        alert("Terima kasih! Ucapan Anda berhasil dikirim.");
+        btn.innerText = "✅ Ucapan Berhasil Terkirim!";
+        btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+        btn.classList.add('bg-emerald-700', 'text-white');
+
+        setTimeout(() => {
+            btn.innerText = "💌 Kirim Ucapan";
+            btn.classList.remove('bg-emerald-700', 'text-white');
+            btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
+            btn.disabled = false;
+        }, 3000);
     }
 </script>
 </body>

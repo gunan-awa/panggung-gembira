@@ -782,6 +782,11 @@ mulaiAudioPG();
                     daftarContainer.appendChild(elemen);
                 });
             })
+            function balasKomentar(namaOrang) {
+                const pesanInput = document.getElementById('ucapan-pesan');
+                pesanInput.value = `@${namaOrang} `;
+                pesanInput.focus();
+            }
             .catch(error => {
                 console.error('Gagal memuat ucapan:', error);
             });

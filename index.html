@@ -761,11 +761,6 @@ mulaiAudioPG();
                 if (!daftarContainer) return;
                 
                 daftarContainer.innerHTML = '';
-                          function balasKomentar(namaOrang) {
-                const pesanInput = document.getElementById('ucapan-pesan');
-                pesanInput.value = `@${namaOrang} `;
-                pesanInput.focus();
-            }
   
                 if (!data || data.length === 0) {
                     daftarContainer.innerHTML = `
@@ -791,7 +786,11 @@ mulaiAudioPG();
                 console.error('Gagal memuat ucapan:', error);
             });
     }
-
+    function balasKomentar(namaOrang) {
+        const pesanInput = document.getElementById('ucapan-pesan');
+        pesanInput.value = `@${namaOrang} `;
+        pesanInput.focus();
+    }
     // Fungsi saat tombol Kirim Ucapan ditekan
     function kirimUcapanPublik(e) {
         e.preventDefault();

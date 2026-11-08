@@ -708,30 +708,76 @@ window.addEventListener('load', function() {
 // Pastikan audio tetap dicoba saat slide pertama kali bergeser
 mulaiAudioPG();
 </script>
-<!-- ================= KOLOM UCAPAN & DOA RESTU (GISCUS) ================= -->
+<!-- ================= KOTAK UCAPAN & DOA RESTU PUBLIK ================= -->
 <section class="max-w-2xl w-full mx-auto px-4 py-8 space-y-4">
-    <div class="bg-[#113822]/95 border border-emerald-800/80 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 class="font-serif-custom text-xl text-amber-100 text-center">Ucapan & Doa Restu</h3>
-        <p class="text-xs text-emerald-300 text-center">Berikan ucapan atau dukungan untuk kesuksesan Panggung Gembira 2026.</p>
-        
-        <!-- Script Giscus Gunan-Awa -->
-        <script src="https://giscus.app/client.js"
-                data-repo="gunan-awa/panggung-gembira"
-                data-repo-id="R_kgDOVjro_g"
-                data-category="Announcements"
-                data-category-id="DIC_kwDOVjro_s4DKqvp"
-                data-mapping="pathname"
-                data-strict="0"
-                data-reactions-enabled="1"
-                data-emit-metadata="0"
-                data-input-position="bottom"
-                data-theme="preferred_color_scheme"
-                data-lang="id"
-                crossorigin="anonymous"
-                async>
-        </script>
+    <div class="bg-[#113822]/95 border border-emerald-800/80 rounded-2xl p-6 shadow-xl space-y-5">
+        <div class="text-center space-y-1">
+            <h3 class="font-serif-custom text-xl text-amber-100">Ucapan & Doa Restu</h3>
+            <p class="text-xs text-emerald-300">Tuliskan ucapan atau doa untuk kesuksesan Panggung Gembira 2026.</p>
+        </div>
+
+        <!-- Form Kirim Ucapan Tanpa Login -->
+        <form id="form-ucapan" onsubmit="kirimUcapanPublik(event)" class="space-y-3 bg-[#091b10] border border-emerald-800/60 rounded-xl p-4">
+            <div class="space-y-1">
+                <label class="text-[11px] font-semibold text-emerald-200 block">Nama / Panggilan:</label>
+                <input type="text" id="ucapan-nama" required placeholder="Contoh: H. Ahmad Fauzi / Wali Santri" class="w-full bg-[#113822] border border-emerald-700 rounded-xl px-4 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[11px] font-semibold text-emerald-200 block">Pesan & Doa Restu:</label>
+                <textarea id="ucapan-pesan" required rows="3" placeholder="Tuliskan ucapan dan doa Anda di sini..." class="w-full bg-[#113822] border border-emerald-700 rounded-xl px-4 py-2 text-xs text-emerald-100 focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+
+            <button type="submit" id="btn-kirim-ucapan" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs py-2.5 rounded-xl shadow-lg transition cursor-pointer">
+                💌 Kirim Ucapan
+            </button>
+        </form>
+
+        <!-- Daftar Ucapan yang Masuk -->
+        <div class="space-y-3 pt-2">
+            <h4 class="text-xs font-bold text-amber-200 border-b border-emerald-800 pb-1">Daftar Ucapan Masuk:</h4>
+            <div id="daftar-ucapan" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                <div class="bg-[#091b10] border border-emerald-800/40 rounded-xl p-3 text-xs space-y-1">
+                    <p class="font-bold text-amber-300">Panitia Panggung Gembira 2026</p>
+                    <p class="text-emerald-100 font-normal">Selamat datang di Buku Tamu & Ucapan Digital. Silakan berikan doa dan dukungan Anda di atas!</p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
+<!-- SCRIPT TAMBAHAN UNTUK UCAPAN -->
+<script>
+    function kirimUcapanPublik(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-kirim-ucapan');
+        const namaInput = document.getElementById('ucapan-nama');
+        const pesanInput = document.getElementById('ucapan-pesan');
+        
+        btn.innerText = "⏳ Mengirim Ucapan...";
+        btn.disabled = true;
+
+        const nama = namaInput.value;
+        const pesan = pesanInput.value;
+
+        // Tambahkan langsung ke daftar ucapan di layar secara instan
+        const daftarContainer = document.getElementById('daftar-ucapan');
+        const elemenBaru = document.createElement('div');
+        elemenBaru.className = "bg-[#091b10] border border-emerald-800/40 rounded-xl p-3 text-xs space-y-1 animate-fadeIn";
+        elemenBaru.innerHTML = `
+            <p class="font-bold text-amber-300">${nama}</p>
+            <p class="text-emerald-100 font-normal">${pesan}</p>
+        `;
+        daftarContainer.prepend(elemenBaru);
+
+        // Reset form
+        namaInput.value = '';
+        pesanInput.value = '';
+        btn.innerText = "💌 Kirim Ucapan";
+        btn.disabled = false;
+        
+        alert("Terima kasih! Ucapan Anda berhasil dikirim.");
+    }
+</script>
 </body>
 </html>

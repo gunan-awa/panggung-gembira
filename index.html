@@ -586,10 +586,9 @@
             const elemenNamaVip = document.getElementById('nama-vip');
             if (elemenNamaVip) {
                 let teksVip = decodeURIComponent(namaVip.replace(/\+/g, ' '));
-                
                 if (teksVip.includes('/')) {
                     let bagian = teksVip.split('/');
-                    let nama = bagian[0].trim().toUpperCase();
+                    let nama = bagian[0].trim();
                     let jabatan = bagian[1].trim();
                     
                     elemenNamaVip.innerHTML = `
@@ -597,7 +596,7 @@
     <span class="block text-amber-300 text-base md:text-xl font-bold tracking-wide mt-0" style="text-decoration:none !important;">${jabatan}</span>
     `;
                 } else {
-                    elemenNamaVip.innerText = teksVip.toUpperCase();
+                    elemenNamaVip.innerText = teksVip;
                 }
             }
             // Sembunyikan slide buku tamu umum (slide ke-18 / index 17)
